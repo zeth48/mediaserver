@@ -8,7 +8,7 @@ Type=notify
 Environment=RCLONE_CONFIG=~/.config/rclone/rclone.conf
 KillMode=none
 RestartSec=5
-ExecStart=/usr/bin/rclone mount mediaserver: OneDrive/ \
+ExecStart=/usr/bin/rclone mount mediaserver: ~/OneDrive \
 --allow-other 
 --vfs-cache-mode full \
 --dir-cache-time 72h \
