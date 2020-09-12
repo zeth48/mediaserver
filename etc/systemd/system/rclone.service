@@ -1,0 +1,33 @@
+[Unit]
+Description=RClone Service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=notify
+Environment=RCLONE_CONFIG=~/.config/rclone/rclone.conf
+KillMode=none
+RestartSec=5
+ExecStart=/usr/bin/rclone mount mediaserver: OneDrive/ \
+--allow-other 
+--vfs-cache-mode full \
+--dir-cache-time 72h \
+--log-level INFO \
+--log-file /opt/rclone/logs/rclone.log \
+--umask 002 \
+--user-agent randomappname101 \
+--rc \
+--rc-addr :5572 \
+--rc-no-auth \
+--cache-dir ~/.cache/ \
+--vfs-cache-max-size 20G \
+--vfs-cache-max-age 3368h \
+--bwlimit-file 16M
+ExecStop=/bin/fusermount -uz ~/OneDrive
+ExecStartPost=/usr/bin/rclone rc vfs/refresh recursive=true --rc-addr 127.0.0.1:5572 _async=true
+Restart=on-failure
+User=phoenix
+Group=phoenix
+
+[Install]
+WantedBy=multi-user.target
